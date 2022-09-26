@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:camera/camera.dart';
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
 
@@ -8,6 +11,7 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class InitState extends State<RegistrationScreen> {
+    XFile? pickedFile;
   void _showImageDialog(){
     showDialog(
       context:context,
@@ -66,12 +70,12 @@ class InitState extends State<RegistrationScreen> {
 
   void _getFromCamera() async
   {
-    XFile? pickedFile = await ImagePicker().pickImage(source:ImageSource.camera);
+     pickedFile = await ImagePicker().pickImage(source:ImageSource.camera);
     Navigator.pop(context);
   }
   void _getFromGallery() async
   {
-    XFile? pickedFile = await ImagePicker().pickImage(source:ImageSource.gallery);
+     pickedFile = await ImagePicker().pickImage(source:ImageSource.gallery);
     Navigator.pop(context);
   }
 
@@ -252,6 +256,30 @@ class InitState extends State<RegistrationScreen> {
                   Text('Pick an Image')
                 ],
               ),
+              ),
+            ),
+            Container(
+              margin:const EdgeInsets.only(left:20,right:20,top:20),
+              padding:const EdgeInsets.only(left:20,right:20),
+              decoration:BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color:Colors.grey[200],
+                boxShadow:const [BoxShadow(
+                    offset:Offset(0,10),
+                    blurRadius:50,
+                    color:Color(0xffEEEEEE)
+                )],
+              ),
+              alignment: Alignment.center,
+
+              child:CircleAvatar(
+                radius:90,
+                backgroundColor: Colors.orange,
+                backgroundImage: pickedFile==null
+                    ?
+                    const AssetImage('images/app_logo.png')
+                    :
+                Image.file(File(pickedFile!.path)).image
               ),
             ),
             GestureDetector(
