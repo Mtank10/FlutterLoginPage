@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:image_picker/image_picker.dart';
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
 
@@ -8,6 +8,73 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class InitState extends State<RegistrationScreen> {
+  void _showImageDialog(){
+    showDialog(
+      context:context,
+      builder:(context){
+         return AlertDialog(
+           title:const Text("Please choose an option"),
+           content:Column(
+             mainAxisSize:MainAxisSize.min,
+             children:[
+               InkWell(
+                 onTap: (){
+                   _getFromCamera();
+                 },
+                 child:Row(
+                   children:const [
+                     Padding(
+                       padding:EdgeInsets.all(4.0),
+                       child:Icon(
+                         Icons.camera,
+                         color: Colors.orange,
+                       )
+                     ),
+                     Text(
+                       "Camera",
+                       style:TextStyle(color:Colors.orange),
+                     ),
+                   ]
+                 )
+               ),
+               InkWell(
+                   onTap: (){
+                     _getFromGallery();
+                   },
+                   child:Row(
+                       children:const [
+                         Padding(
+                             padding:EdgeInsets.all(4.0),
+                             child:Icon(
+                               Icons.image,
+                               color: Colors.orange,
+                             )
+                         ),
+                         Text(
+                           "Gallery",
+                           style:TextStyle(color:Colors.orange),
+                         ),
+                       ]
+                   )
+               )
+             ],
+           )
+         ) ;
+      }
+    );
+  }
+
+  void _getFromCamera() async
+  {
+    XFile? pickedFile = await ImagePicker().pickImage(source:ImageSource.camera);
+    Navigator.pop(context);
+  }
+  void _getFromGallery() async
+  {
+    XFile? pickedFile = await ImagePicker().pickImage(source:ImageSource.gallery);
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return initWidget();
@@ -132,6 +199,7 @@ class InitState extends State<RegistrationScreen> {
                     )
                 )
             ),
+
             Container(
                 margin:const EdgeInsets.only(left:20,right:20,top:20),
                 padding:const EdgeInsets.only(left:20,right:20),
@@ -158,6 +226,33 @@ class InitState extends State<RegistrationScreen> {
                       focusedBorder: InputBorder.none,
                     )
                 )
+            ),
+            Container(
+              margin:const EdgeInsets.only(left:20,right:20,top:20),
+              padding:const EdgeInsets.only(left:20,right:20),
+              decoration:BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color:Colors.grey[200],
+                boxShadow:const [BoxShadow(
+                    offset:Offset(0,10),
+                    blurRadius:50,
+                    color:Color(0xffEEEEEE)
+                )],
+              ),
+              alignment: Alignment.center,
+              child:ElevatedButton(
+                onPressed:()=>{
+                  _showImageDialog(),
+                }, child: Row(
+                children:const [
+                  Icon(Icons.image_outlined),
+                  SizedBox(
+                    width:20,
+                  ),
+                  Text('Pick an Image')
+                ],
+              ),
+              ),
             ),
             GestureDetector(
                 onTap:()=>{
